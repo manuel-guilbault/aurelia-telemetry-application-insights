@@ -1,5 +1,8 @@
 # aurelia-telemetry-application-insights
+
 Gather telemetry data in an Aurelia application with Application Insights.
+
+*This plugin is intended to be used with the [aurelia-telemetry](https://github.com/manuel-guilbault/aurelia-telemetry) plugin.*
 
 ## Configuration
 
