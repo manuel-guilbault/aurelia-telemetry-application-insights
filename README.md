@@ -14,5 +14,5 @@ export function configure(aurelia: Aurelia) {
 }
 ```
 
-The plugin's `configure` function expects an object, which is then passed to the
+The plugin expects a configuration object, which is then passed to the
 `AppInsights`' `downloadAndSetup` method.
