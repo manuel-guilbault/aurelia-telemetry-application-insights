@@ -8,27 +8,36 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { logLevel } from 'aurelia-logging';
 import { TelemetryClient } from 'aurelia-telemetry';
 import { AppInsights } from 'applicationinsights-js';
+var levelMap = new Map();
+levelMap.set(logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
+levelMap.set(logLevel.info, 'Information'); //AI.SeverityLevel.Information
+levelMap.set(logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
+levelMap.set(logLevel.error, 'Error'); //AI.SeverityLevel.Error
 var ApplicationInsightsTelemetryClient = (function (_super) {
     __extends(ApplicationInsightsTelemetryClient, _super);
     function ApplicationInsightsTelemetryClient() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ApplicationInsightsTelemetryClient.prototype.trackPageView = function (properties) {
-        var otherProperties = Object.assign({}, properties);
-        delete otherProperties.title;
-        delete otherProperties.path;
-        AppInsights.trackPageView(properties.title, properties.path, otherProperties);
+    ApplicationInsightsTelemetryClient.prototype.trackPageView = function (path) {
+        AppInsights.trackPageView(undefined, path);
     };
     ApplicationInsightsTelemetryClient.prototype.trackEvent = function (name, properties) {
         AppInsights.trackEvent(name, properties);
     };
-    ApplicationInsightsTelemetryClient.prototype.trackError = function (error, properties) {
-        AppInsights.trackException(error, undefined, properties);
+    ApplicationInsightsTelemetryClient.prototype.trackError = function (error) {
+        AppInsights.trackException(error);
     };
-    ApplicationInsightsTelemetryClient.prototype.trackLog = function (message, properties) {
-        AppInsights.trackTrace(message, properties);
+    ApplicationInsightsTelemetryClient.prototype.trackLog = function (message, level) {
+        var args = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            args[_i - 2] = arguments[_i];
+        }
+        AppInsights.trackTrace(message, {
+            'Severity level': levelMap.get(level),
+        });
     };
     return ApplicationInsightsTelemetryClient;
 }(TelemetryClient));

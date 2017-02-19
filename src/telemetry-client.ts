@@ -1,25 +1,30 @@
-import {TelemetryClient, PageViewProperties, EventProperties, ErrorProperties, LogProperties} from 'aurelia-telemetry';
+import {logLevel} from 'aurelia-logging';
+import {TelemetryClient} from 'aurelia-telemetry';
 import {AppInsights} from 'applicationinsights-js';
+
+const levelMap = new Map<number, string>();
+levelMap.set(logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
+levelMap.set(logLevel.info, 'Information'); //AI.SeverityLevel.Information
+levelMap.set(logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
+levelMap.set(logLevel.error, 'Error'); //AI.SeverityLevel.Error
 
 export class ApplicationInsightsTelemetryClient extends TelemetryClient {
   
-  trackPageView(properties: PageViewProperties) {
-    const otherProperties = Object.assign({}, properties);
-    delete otherProperties.title;
-    delete otherProperties.path;
-
-    AppInsights.trackPageView(properties.title, properties.path, otherProperties);
+  trackPageView(path: string) {
+    AppInsights.trackPageView(undefined, path);
   }
 
-  trackEvent(name: string, properties?: EventProperties) {
+  trackEvent(name: string, properties?: { [key: string]: any }) {
     AppInsights.trackEvent(name, properties);
   }
 
-  trackError(error: Error, properties?: ErrorProperties) {
-    AppInsights.trackException(error, undefined, properties);
+  trackError(error: Error) {
+    AppInsights.trackException(error);
   }
 
-  trackLog(message: string, properties?: LogProperties) {
-    AppInsights.trackTrace(message, properties);
+  trackLog(message: string, level: number, ...args: any[]) {
+    AppInsights.trackTrace(message, {
+      'Severity level': levelMap.get(level),
+    });
   }
 }

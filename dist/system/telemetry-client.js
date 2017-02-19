@@ -1,4 +1,4 @@
-System.register(["aurelia-telemetry", "applicationinsights-js"], function (exports_1, context_1) {
+System.register(["aurelia-logging", "aurelia-telemetry", "applicationinsights-js"], function (exports_1, context_1) {
     "use strict";
     var __extends = (this && this.__extends) || (function () {
         var extendStatics = Object.setPrototypeOf ||
@@ -11,9 +11,12 @@ System.register(["aurelia-telemetry", "applicationinsights-js"], function (expor
         };
     })();
     var __moduleName = context_1 && context_1.id;
-    var aurelia_telemetry_1, applicationinsights_js_1, ApplicationInsightsTelemetryClient;
+    var aurelia_logging_1, aurelia_telemetry_1, applicationinsights_js_1, levelMap, ApplicationInsightsTelemetryClient;
     return {
         setters: [
+            function (aurelia_logging_1_1) {
+                aurelia_logging_1 = aurelia_logging_1_1;
+            },
             function (aurelia_telemetry_1_1) {
                 aurelia_telemetry_1 = aurelia_telemetry_1_1;
             },
@@ -22,25 +25,33 @@ System.register(["aurelia-telemetry", "applicationinsights-js"], function (expor
             }
         ],
         execute: function () {
+            levelMap = new Map();
+            levelMap.set(aurelia_logging_1.logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
+            levelMap.set(aurelia_logging_1.logLevel.info, 'Information'); //AI.SeverityLevel.Information
+            levelMap.set(aurelia_logging_1.logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
+            levelMap.set(aurelia_logging_1.logLevel.error, 'Error'); //AI.SeverityLevel.Error
             ApplicationInsightsTelemetryClient = (function (_super) {
                 __extends(ApplicationInsightsTelemetryClient, _super);
                 function ApplicationInsightsTelemetryClient() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
-                ApplicationInsightsTelemetryClient.prototype.trackPageView = function (properties) {
-                    var otherProperties = Object.assign({}, properties);
-                    delete otherProperties.title;
-                    delete otherProperties.path;
-                    applicationinsights_js_1.AppInsights.trackPageView(properties.title, properties.path, otherProperties);
+                ApplicationInsightsTelemetryClient.prototype.trackPageView = function (path) {
+                    applicationinsights_js_1.AppInsights.trackPageView(undefined, path);
                 };
                 ApplicationInsightsTelemetryClient.prototype.trackEvent = function (name, properties) {
                     applicationinsights_js_1.AppInsights.trackEvent(name, properties);
                 };
-                ApplicationInsightsTelemetryClient.prototype.trackError = function (error, properties) {
-                    applicationinsights_js_1.AppInsights.trackException(error, undefined, properties);
+                ApplicationInsightsTelemetryClient.prototype.trackError = function (error) {
+                    applicationinsights_js_1.AppInsights.trackException(error);
                 };
-                ApplicationInsightsTelemetryClient.prototype.trackLog = function (message, properties) {
-                    applicationinsights_js_1.AppInsights.trackTrace(message, properties);
+                ApplicationInsightsTelemetryClient.prototype.trackLog = function (message, level) {
+                    var args = [];
+                    for (var _i = 2; _i < arguments.length; _i++) {
+                        args[_i - 2] = arguments[_i];
+                    }
+                    applicationinsights_js_1.AppInsights.trackTrace(message, {
+                        'Severity level': levelMap.get(level),
+                    });
                 };
                 return ApplicationInsightsTelemetryClient;
             }(aurelia_telemetry_1.TelemetryClient));
