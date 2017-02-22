@@ -12,15 +12,16 @@ var __extends = (this && this.__extends) || (function () {
 var aurelia_logging_1 = require("aurelia-logging");
 var aurelia_telemetry_1 = require("aurelia-telemetry");
 var applicationinsights_js_1 = require("applicationinsights-js");
-var levelMap = new Map();
-levelMap.set(aurelia_logging_1.logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
-levelMap.set(aurelia_logging_1.logLevel.info, 'Information'); //AI.SeverityLevel.Information
-levelMap.set(aurelia_logging_1.logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
-levelMap.set(aurelia_logging_1.logLevel.error, 'Error'); //AI.SeverityLevel.Error
 var ApplicationInsightsTelemetryClient = (function (_super) {
     __extends(ApplicationInsightsTelemetryClient, _super);
     function ApplicationInsightsTelemetryClient() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super.call(this) || this;
+        _this.levelMap = new Map();
+        _this.levelMap.set(aurelia_logging_1.logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
+        _this.levelMap.set(aurelia_logging_1.logLevel.info, 'Information'); //AI.SeverityLevel.Information
+        _this.levelMap.set(aurelia_logging_1.logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
+        _this.levelMap.set(aurelia_logging_1.logLevel.error, 'Error'); //AI.SeverityLevel.Error
+        return _this;
     }
     ApplicationInsightsTelemetryClient.prototype.trackPageView = function (path) {
         applicationinsights_js_1.AppInsights.trackPageView(undefined, path);
@@ -29,6 +30,9 @@ var ApplicationInsightsTelemetryClient = (function (_super) {
         applicationinsights_js_1.AppInsights.trackEvent(name, properties);
     };
     ApplicationInsightsTelemetryClient.prototype.trackError = function (error) {
+        if (typeof error === 'string') {
+            error = new Error(error);
+        }
         applicationinsights_js_1.AppInsights.trackException(error);
     };
     ApplicationInsightsTelemetryClient.prototype.trackLog = function (message, level) {
@@ -36,9 +40,15 @@ var ApplicationInsightsTelemetryClient = (function (_super) {
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
         }
-        applicationinsights_js_1.AppInsights.trackTrace(message, {
-            'Severity level': levelMap.get(level),
-        });
+        var properties = {};
+        var severityLevel = this.levelMap.get(level);
+        if (severityLevel) {
+            properties['Severity level'] = severityLevel;
+        }
+        if (args.length) {
+            properties['Arguments'] = JSON.stringify(args);
+        }
+        applicationinsights_js_1.AppInsights.trackTrace(message, properties);
     };
     return ApplicationInsightsTelemetryClient;
 }(aurelia_telemetry_1.TelemetryClient));
