@@ -16,7 +16,7 @@ export function configure(aurelia: Aurelia) {
     .standardConfiguration()
     .plugin('aurelia-telemetry')
     .plugin('aurelia-telemetry-application-insights', () => {
-      AppInsights.downloadAndSetup({ instrumentationKey: '<YOUR_KEY>' });
+      AppInsights.downloadAndSetup({ instrumentationKey: '<YOUR_INSTRUMENTATION_KEY>' });
     });
 
   aurelia.start().then(() => aurelia.setRoot());

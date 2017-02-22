@@ -1,6 +1,6 @@
 {
   "name": "aurelia-telemetry-application-insights",
-  "version": "0.1.1",
+  "version": "1.0.0-beta-1",
   "description": "Telemetry with Application Insights for Aurelia applications.",
   "keywords": [
     "application",
