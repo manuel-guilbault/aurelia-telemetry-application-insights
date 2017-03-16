@@ -1,7 +1,7 @@
 import { TelemetryClient } from 'aurelia-telemetry';
-export declare class ApplicationInsightsTelemetryClient extends TelemetryClient {
+export declare class TelemetryAdapter extends TelemetryClient {
+    private static createDefaultLevelMap();
     levelMap: Map<number, string>;
-    constructor();
     trackPageView(path: string): void;
     trackEvent(name: string, properties?: {
         [k: string]: any;

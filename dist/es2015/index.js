@@ -1,9 +1,13 @@
-export * from './telemetry-client';
+export * from './telemetry-adapter';
 import { TelemetryClient } from 'aurelia-telemetry';
-import { ApplicationInsightsTelemetryClient } from './telemetry-client';
+import { AppInsights } from 'applicationinsights-js';
+import { TelemetryAdapter } from './telemetry-adapter';
 export function configure(aurelia, config) {
-    if (config) {
+    if (typeof config === 'function') {
         config();
     }
-    aurelia.singleton(TelemetryClient, ApplicationInsightsTelemetryClient);
+    else if (config) {
+        AppInsights.downloadAndSetup(config);
+    }
+    aurelia.singleton(TelemetryClient, TelemetryAdapter);
 }

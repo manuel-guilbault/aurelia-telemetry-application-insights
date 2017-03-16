@@ -2,6 +2,6 @@
   "name": "aurelia-telemetry-application-insights",
   "main": "dist/amd/index.d.ts",
   "globalDependencies": {
-    "applicationinsights-js": "registry:dt/applicationinsights-js#0.23.2+20161005184000"
+    "applicationinsights-js": "registry:dt/applicationinsights-js#1.0.0+20170224184204"
   }
 }

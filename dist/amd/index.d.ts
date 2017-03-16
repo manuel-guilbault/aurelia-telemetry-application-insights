@@ -1,3 +1,3 @@
-export * from './telemetry-client';
+export * from './telemetry-adapter';
 import { FrameworkConfiguration } from 'aurelia-framework';
-export declare function configure(aurelia: FrameworkConfiguration, config?: (() => void)): void;
+export declare function configure(aurelia: FrameworkConfiguration, config?: Function | Microsoft.ApplicationInsights.IConfig): void;

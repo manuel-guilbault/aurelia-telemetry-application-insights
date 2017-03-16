@@ -1,8 +1,8 @@
 {
   "resolution": "main",
   "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/80060c94ef549c077a011977c2b5461bd0fd8947/applicationinsights-js/index.d.ts",
-    "raw": "registry:dt/applicationinsights-js#0.23.2+20161005184000",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/80060c94ef549c077a011977c2b5461bd0fd8947/applicationinsights-js/index.d.ts"
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/18e5789ae43fd02356ba2f7c68f1f8ad54ce633b/applicationinsights-js/index.d.ts",
+    "raw": "registry:dt/applicationinsights-js#1.0.0+20170224184204",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/18e5789ae43fd02356ba2f7c68f1f8ad54ce633b/applicationinsights-js/index.d.ts"
   }
 }

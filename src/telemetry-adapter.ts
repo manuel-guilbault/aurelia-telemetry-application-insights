@@ -1,20 +1,22 @@
+import {autoinject} from 'aurelia-framework';
 import {logLevel} from 'aurelia-logging';
 import {TelemetryClient} from 'aurelia-telemetry';
 import {AppInsights} from 'applicationinsights-js';
 
-export class ApplicationInsightsTelemetryClient extends TelemetryClient {
+@autoinject
+export class TelemetryAdapter extends TelemetryClient {
 
-  levelMap: Map<number, string>;
-
-  constructor() {
-    super();
-    this.levelMap = new Map<number, string>();
-    this.levelMap.set(logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
-    this.levelMap.set(logLevel.info, 'Information'); //AI.SeverityLevel.Information
-    this.levelMap.set(logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
-    this.levelMap.set(logLevel.error, 'Error'); //AI.SeverityLevel.Error
+  private static createDefaultLevelMap() {
+    const levelMap = new Map<number, string>();
+    levelMap.set(logLevel.debug, 'Verbose'); //AI.SeverityLevel.Verbose
+    levelMap.set(logLevel.info, 'Information'); //AI.SeverityLevel.Information
+    levelMap.set(logLevel.warn, 'Warning'); //AI.SeverityLevel.Warning
+    levelMap.set(logLevel.error, 'Error'); //AI.SeverityLevel.Error
+    return levelMap;
   }
-  
+
+  levelMap: Map<number, string> = TelemetryAdapter.createDefaultLevelMap();
+
   trackPageView(path: string) {
     AppInsights.trackPageView(undefined, path);
   }
